@@ -1,6 +1,9 @@
 # 学习 Vue2 的源码
 
+> 项目的版本是 vue2.6.14
+
 ## 项目的目录结构
+
 ```shell
 ├─benchmarks          // 性能测试相关
 ├─dist                // 打包后的文件集合
@@ -25,6 +28,7 @@
 ```
 
 ## 编译后的版本
+
 > 如果执行 npm run build 命令，dist 目录中会出现各种后缀的包，不同的后缀代表不同的编译版本，主要区别是模块规范和是否带编译器。
 
 |模块规范|UMD|CommonJS|ES Module|ES Module（直接用于浏览器）|
@@ -38,5 +42,6 @@
 * **编译器**：主要用于将模板字符串编译成 Javascript 渲染函数。
 * **运行时**： 负责创建 vue 实例、渲染并处理虚拟 DOM 等的代码。没有编译模板功能。
 * **UMD**：UMD 版本可以通过标签直接用在浏览器中。jsDelivr CDN 的 cdn.jsdelivr.net/npm/vue 默认文件就是运行时 + 编译器的 UMD 版本 (`vue.js`)。
-* **CommonJS**：CommonJS 版本用来配合老的打包工具比如 Browserify 或 webpack 1。这些打包工具的默认文件 (`pkg.main`) 是只包含运行时的 CommonJS 版本 (`vue.runtime.common.js`)。
+* **CommonJS**：CommonJS 版本用来配合老的打包工具比如 Browserify 或 webpack 1。这些打包工具的默认文件 (`pkg.main`) 是只包含运行时的 CommonJS
+  版本 (`vue.runtime.common.js`)。
 * **ES Module**：从 2.6 开始 Vue 会提供两个 ES Modules (ESM) 构建文件：
