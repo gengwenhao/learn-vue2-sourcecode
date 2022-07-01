@@ -1,3 +1,6 @@
+/**
+ * 这个文件是 Vue 的入口，但是 Vue 的定义放在了 @/instance/index.js 中
+ */
 import Vue from './instance/index'
 import { initGlobalAPI } from './global-api/index'
 import { isServerRendering } from 'core/util/env'

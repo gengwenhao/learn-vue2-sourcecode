@@ -1,35 +1,38 @@
-/* @flow */
-
+// 可以把 VNode 理解成 JS 版本的 DOM元素
+// 不用类型的 vnode 表示了不同类型的真实 DOM元素
 export default class VNode {
-  tag: string | void;
-  data: VNodeData | void;
-  children: ?Array<VNode>;
-  text: string | void;
-  elm: Node | void;
-  ns: string | void;
-  context: Component | void; // rendered in this component's scope
-  key: string | number | void;
-  componentOptions: VNodeComponentOptions | void;
-  componentInstance: Component | void; // component instance
-  parent: VNode | void; // component placeholder node
+  // 元素节点通常具有四种有效属性：tag、data、children、context
+  tag: string | void
+  data: VNodeData | void
+  children: ?Array<VNode>
+  text: string | void
+  elm: Node | void
+  ns: string | void
+  context: Component | void // rendered in this component's scope
+  key: string | number | void
+  // 组件节点有两个独有的属性：componentOptions、componentInstance
+  componentOptions: VNodeComponentOptions | void
+  componentInstance: Component | void // component instance
+  parent: VNode | void // component placeholder node
 
   // strictly internal
-  raw: boolean; // contains raw HTML? (server only)
-  isStatic: boolean; // hoisted static node
-  isRootInsert: boolean; // necessary for enter transition check
-  isComment: boolean; // empty comment placeholder?
-  isCloned: boolean; // is a cloned node?
-  isOnce: boolean; // is a v-once node?
-  asyncFactory: Function | void; // async component factory function
-  asyncMeta: Object | void;
-  isAsyncPlaceholder: boolean;
-  ssrContext: Object | void;
-  fnContext: Component | void; // real context vm for functional nodes
-  fnOptions: ?ComponentOptions; // for SSR caching
-  devtoolsMeta: ?Object; // used to store functional render context for devtools
-  fnScopeId: ?string; // functional scope id support
+  raw: boolean // contains raw HTML? (server only)
+  isStatic: boolean // hoisted static node
+  isRootInsert: boolean // necessary for enter transition check
+  isComment: boolean // empty comment placeholder?
+  isCloned: boolean // is a cloned node?
+  isOnce: boolean // is a v-once node?
+  asyncFactory: Function | void // async component factory function
+  asyncMeta: Object | void
+  isAsyncPlaceholder: boolean
+  ssrContext: Object | void
+  // 函数式组件只有 fnContext 和 fnOptions 两个属性
+  fnContext: Component | void // real context vm for functional nodes
+  fnOptions: ?ComponentOptions // for SSR caching
+  devtoolsMeta: ?Object // used to store functional render context for devtools
+  fnScopeId: ?string // functional scope id support
 
-  constructor (
+  constructor(
     tag?: string,
     data?: VNodeData,
     children?: ?Array<VNode>,
@@ -66,27 +69,38 @@ export default class VNode {
 
   // DEPRECATED: alias for componentInstance for backwards compat.
   /* istanbul ignore next */
-  get child (): Component | void {
+  get child(): Component | void {
     return this.componentInstance
   }
 }
 
-export const createEmptyVNode = (text: string = '') => {
+/**
+ * 注释节点，一个注释节点只有 text 和 isComment 两个有效属性
+ * @param text
+ * @returns {VNode}
+ */
+export const createEmptyVNode = (text) => {
   const node = new VNode()
   node.text = text
   node.isComment = true
   return node
 }
 
-export function createTextVNode (val: string | number) {
+/**
+ * 文本节点，只有一个 text 属性
+ * @param val
+ * @returns {VNode}
+ */
+export function createTextVNode(val: string | number) {
   return new VNode(undefined, undefined, undefined, String(val))
 }
 
-// optimized shallow clone
-// used for static nodes and slot nodes because they may be reused across
-// multiple renders, cloning them avoids errors when DOM manipulations rely
-// on their elm reference.
-export function cloneVNode (vnode: VNode): VNode {
+/**
+ * 克隆节点，用于优化静态节点和插槽节点
+ * @param vnode
+ * @returns {VNode}
+ */
+export function cloneVNode(vnode: VNode): VNode {
   const cloned = new VNode(
     vnode.tag,
     vnode.data,
