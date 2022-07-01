@@ -1,9 +1,11 @@
 /* @flow */
 
 // can we use __proto__?
+// 判断 __proto__ 这种隐式原型写法浏览器是否支持
 export const hasProto = '__proto__' in {}
 
 // Browser environment sniffing
+// 用来测试浏览器环境的小代码段
 export const inBrowser = typeof window !== 'undefined'
 export const inWeex = typeof WXEnvironment !== 'undefined' && !!WXEnvironment.platform
 export const weexPlatform = inWeex && WXEnvironment.platform.toLowerCase()
@@ -25,13 +27,14 @@ if (inBrowser) {
   try {
     const opts = {}
     Object.defineProperty(opts, 'passive', ({
-      get () {
+      get() {
         /* istanbul ignore next */
         supportsPassive = true
       }
     }: Object)) // https://github.com/facebook/flow/issues/285
     window.addEventListener('test-passive', null, opts)
-  } catch (e) {}
+  } catch (e) {
+  }
 }
 
 // this needs to be lazy-evaled because vue may be required before
@@ -55,7 +58,7 @@ export const isServerRendering = () => {
 export const devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__
 
 /* istanbul ignore next */
-export function isNative (Ctor: any): boolean {
+export function isNative(Ctor: any): boolean {
   return typeof Ctor === 'function' && /native code/.test(Ctor.toString())
 }
 
@@ -71,17 +74,21 @@ if (typeof Set !== 'undefined' && isNative(Set)) {
 } else {
   // a non-standard Set polyfill that only works with primitive keys.
   _Set = class Set implements SimpleSet {
-    set: Object;
-    constructor () {
+    set: Object
+
+    constructor() {
       this.set = Object.create(null)
     }
-    has (key: string | number) {
+
+    has(key: string | number) {
       return this.set[key] === true
     }
-    add (key: string | number) {
+
+    add(key: string | number) {
       this.set[key] = true
     }
-    clear () {
+
+    clear() {
       this.set = Object.create(null)
     }
   }
@@ -89,8 +96,10 @@ if (typeof Set !== 'undefined' && isNative(Set)) {
 
 export interface SimpleSet {
   has(key: string | number): boolean;
+
   add(key: string | number): mixed;
+
   clear(): void;
 }
 
-export { _Set }
+export {_Set}
